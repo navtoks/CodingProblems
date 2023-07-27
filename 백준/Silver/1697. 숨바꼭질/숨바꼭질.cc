@@ -3,8 +3,8 @@
 #include <queue>
 using namespace std;
 
-int MAXN = 100'000;
-vector<int> arr(MAXN * 2 + 1, -1);
+const int MAXN = 100'000;
+vector<int> arr(MAXN + 1, -1);
 
 void NextMove(int u, int v, queue<int>& checker) {
     if (v > MAXN || v < 0) return;
