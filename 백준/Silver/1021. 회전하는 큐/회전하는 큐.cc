@@ -2,31 +2,49 @@
 #include <list>
 using namespace std;
 
-void Right(list<int>& arr) {
+list<int> arr;
+
+void RotateRight() {
     arr.push_back(arr.front());
     arr.pop_front();
 }
 
-void Left(list<int>& arr) {
+void RotateLeft() {
     arr.push_front(arr.back());
     arr.pop_back();
 }
 
-int FindRight(const list<int>& arr, int x) {
+int CountRight(int x) {
     int cnt = 0;
-    for (auto iter = begin(arr); iter != end(arr); ++iter) {
-        if (*iter == x) break;
+    for (const auto& elt : arr) {
+        if (elt == x) break;
         ++cnt;
     }
     return cnt;
 }
 
-int FindLeft(const list<int>& arr, int x) {
+int CountLeft(int x) {
     int cnt = 0;
     for (auto iter = rbegin(arr); iter != rend(arr); ++iter) {
         ++cnt;
         if (*iter == x) break;
     }
+    return cnt;
+}
+
+int Process(int x) {
+    int cnt_r = CountRight(x);
+    int cnt_l = CountLeft(x);
+
+    int cnt = min(cnt_r, cnt_l);
+    if (cnt_r <= cnt_l) {
+        while (cnt_r--) RotateRight();
+    }
+    else {
+        while (cnt_l--) RotateLeft();
+    }
+    arr.pop_front();
+
     return cnt;
 }
 
@@ -36,7 +54,6 @@ int main() {
     int n, m;
     cin >> n >> m;
 
-    list<int> arr;
     for (int i = 0; i < n; ++i) {
         arr.push_back(i + 1);
     }
@@ -45,22 +62,7 @@ int main() {
     for (int i = 0; i < m; ++i) {
         int x;
         cin >> x;
-        int right_cnt = FindRight(arr, x);
-        int left_cnt = FindLeft(arr, x);
-        if (right_cnt <= left_cnt) {
-            cnt += right_cnt;
-            while (right_cnt--) {
-                Right(arr);
-            }
-            arr.pop_front();
-        }
-        else {
-            cnt += left_cnt;
-            while (left_cnt--) {
-                Left(arr);
-            }
-            arr.pop_front();
-        }
+        cnt += Process(x);
     }
     cout << cnt;
 
