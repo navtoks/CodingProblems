@@ -5,54 +5,55 @@
 using namespace std;
 
 int a, b;
-const int M = 10000;
-vector<string> arr(M);
-vector<bool> visited;
-queue<int> temp;
+const int N = 10000;
+string moves{"DSLR"};
 
-int D(int n) {
-    n *= 2;
-    return n >= M ? n - M : n;
-}
+struct X {
+    int from{-1};
+    char movement{'\n'};
+};
+using vx = vector<X>;
 
-int S(int n) {
-    if (n == 0) return M - 1;
-    return n - 1;
-}
-
-int L(int n) {
-    n *= 10;
-    return n / M + n % M;
-}
-
-int R(int n) {
-    return n / 10 + (n % 10) * 1000;
-}
-
-void NextMove(int u, int v, char c) {
-    if (visited[v]) return;
-    temp.push(v);
-    visited[v] = true;
-    arr[v] = arr[u] + c;
-}
-
-void Bfs(int a, int b) {
-    temp = queue<int>();
-    temp.push(a);
-    visited[a] = true;
-    while (!temp.empty()) {
-        int u = temp.front();
-        temp.pop();
-        if (u == b) {
-            cout << arr[u] << '\n';
-            break;
-        }
-
-        NextMove(u, D(u), 'D');
-        NextMove(u, S(u), 'S');
-        NextMove(u, L(u), 'L');
-        NextMove(u, R(u), 'R');
+void NextMove(int u, char c, vx& arr, queue<int>& temp) {
+    int v;
+    if (c == 'D') {
+        v = 2 * u;
+        if (v >= N) v -= N;
     }
+    else if (c == 'S') v = (u == 0 ? N - 1 : u - 1);
+    else if (c == 'L') {
+        v = 10 * u;
+        v = v % N + v / N;
+    }
+    else v = u / 10 + (u % 10) * 1000;
+
+    if (arr[v].from != -1) return;
+    temp.push(v);
+    arr[v] = X{u, c};
+}
+
+void Bfs(vx& arr) {
+    queue<int> temp;
+    temp.push(a);
+    arr[a].from = N;
+    while (!temp.empty()) {
+        int u = temp.front();   temp.pop();
+        if (u == b) break;
+
+        for (char c : moves) NextMove(u, c, arr, temp);
+    }
+}
+
+void PrintResult(const vx& arr) {
+    string result;
+    while (b != a) {
+        result += arr[b].movement;
+        b = arr[b].from;
+    }
+    for (auto i = rbegin(result); i != rend(result); ++i) {
+        cout << *i;
+    }
+    cout << '\n';
 }
 
 int main() {
@@ -62,9 +63,9 @@ int main() {
     cin >> T;
     while (T--) {
         cin >> a >> b;
-        visited = vector<bool>(M, false);
-        arr = vector<string>(M);
-        Bfs(a, b);
+        vx arr(N);
+        Bfs(arr);
+        PrintResult(arr);
     }
 
     return 0;
