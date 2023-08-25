@@ -25,14 +25,11 @@ bool IsVowel(char c) {
 }
 
 bool HasSameConsonants() {
-    string s;
-    for (const auto& c : s1) {
-        if (!IsVowel(c)) s += c;
-    }
     int idx = 0;
-    for (int i = 0; i < s.size(); ++i) {
+    for (int i = 0; i < s1.size(); ++i) {
+        while (IsVowel(s1[i])) ++i;
         while (IsVowel(s2[idx])) ++idx;
-        if (s[i] != s2[idx]) return false;
+        if (s1[i] != s2[idx]) return false;
         ++idx;
     }
     return true;
