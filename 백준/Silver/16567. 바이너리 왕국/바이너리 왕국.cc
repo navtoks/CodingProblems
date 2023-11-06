@@ -28,16 +28,9 @@ int main() {
             cin >> x;
             if (arr[x]) continue;
 
-            if (x == 1) {
-                if (!arr[2]) ++cnt;
-            }
-            else if (x == n) {
-                if (!arr[n - 1]) ++cnt;
-            }
-            else {
-                if (arr[x - 1] && arr[x + 1]) --cnt;
-                if (!arr[x - 1] && !arr[x + 1]) ++cnt;
-            }
+            if (x == 1) cnt += (1 - arr[2]);
+            else if (x == n) cnt += (1 - arr[n - 1]);
+            else cnt += (1 - arr[x - 1] - arr[x + 1]);
             arr[x] = 1;
         }
         else cout << cnt << '\n';
