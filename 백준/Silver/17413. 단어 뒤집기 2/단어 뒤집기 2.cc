@@ -18,13 +18,9 @@ int main() {
             while (s[i] != '>' && i < n) arr.back() += s[i++];
             arr.back() += s[i++];
         }
-        else if (s[i] != ' ') {
+        else {
             arr.push_back("");
-            while (s[i] != ' ' && s[i] != '<' && i < n) arr.back() += s[i++];
-        }
-        else {  // s[i] == ' '
-            ++i;
-            arr.push_back(" ");
+            if (s[i] == ' ') arr.back() += s[i++];
             while (s[i] != ' ' && s[i] != '<' && i < n) arr.back() += s[i++];
         }
     }
